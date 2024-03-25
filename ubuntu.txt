@@ -1,0 +1,27 @@
+alias xampp_start='/opt/lampp/lampp start'
+unalias xampp_start
+
+Ubuntu Setting up the Global PHP in Ubuntu
+
+Case: Installed Xampp on Computer but php -v shows another version of php installed in usr/bin/php.
+Run these commands to fix this
+
+//remove the Independent php
+sudo rm /usr/bin
+
+//do the symlinking and connect Xampp's PHP Globally
+sudo ln -s /opt/lampp/bin/php /usr/bin/php
+
+//fix the mbstring error using this command to install the mbstring extension
+sudo apt-get install php-mbstring
+
+//Enable mbstring 
+sudo phpdismod mbstring # disable mbstring extension
+
+sudo phpenmod mbstring # enable mbstring extension again
+
+//Error While starting the Xampp: xampplib: line 22: netstat: command not found
+Run this command: sudo apt install net-tools
+
+//Error While Removing the File From Git using git rm file (1).sql
+Use:  git rm file\ \(1\).sql

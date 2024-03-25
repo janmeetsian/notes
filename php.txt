@@ -1,0 +1,66 @@
+<?php if(array_search('IND', array_column($userAccess, 'ac_name')) !== FALSE ){ echo "checked"; } ?>
+
+$search = array("\\", "\x00", "\n", "\r", "'", '"', "\x1a");
+$replace = array("\\\\","\\0","\\n", "\\r", "\'", '\"', "\\Z");
+$description = str_replace($search, $replace, $catarray['description']);
+
+preg_replace('/\D/', '', $userId)
+
+Force https:                                                                                                                                                                                                 
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+
+How to use PHP Mailer
+1. You should have composer installed on your computer
+2. Goto folder and run command on CMD "composer require phpmailer/phpmailer"
+3. Use the code below to send emails
+
+<?php
+// Import PHPMailer classes into the global namespace
+// These must be at the top of your script, not inside a function
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// Load Composer's autoloader
+require 'vendor/autoload.php';
+
+// Instantiation and passing `true` enables exceptions
+$mail = new PHPMailer(true);
+
+try {
+    //Server settings
+    $mail->SMTPDebug = 2;                                       // Enable verbose debug output
+    $mail->isSMTP();                                            // Set mailer to use SMTP
+    $mail->Host       = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+    $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+    $mail->Username   = 'email';                     // SMTP username
+    $mail->Password   = 'password';                               // SMTP password
+    $ngymail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
+    $mail->Port       = 587;                                    // TCP port to connect to
+
+    //Recipients
+    $mail->setfrom('from@example.com', 'Mailer');
+    $mail->addaddress('janmeet@speedum.co.in', 'Joe User');     // Add a recipient
+    $mail->addreplyto('info@example.com', 'Information');
+    $mail->addcc('cc@example.com');
+    $mail->addbcc('bcc@example.com');
+
+    // Content
+    $mail->isHTML(true);                                  // Set email format to HTML
+    $mail->Subject = 'Here is the subject';
+    $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+    $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+    
+    $mail->SMTPOptions = array(
+        'ssl' => array(
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+        'allow_self_signed' => true
+        )
+    );
+    $mail->send();
+    echo 'Message has been sent';
+} catch (Exception $e) {
+    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+}

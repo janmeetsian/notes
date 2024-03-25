@@ -1,0 +1,31 @@
+Create Custom Scroll for Divs
+/ width /
+#latestJobs::-webkit-scrollbar {
+  width: 1px;
+}
+
+/ Track /
+#latestJobs::-webkit-scrollbar-track {
+  background: white; 
+}
+ 
+/ Handle /
+#latestJobs::-webkit-scrollbar-thumb {
+  background: lightgray; 
+}
+
+/ Handle on hover /
+#latestJobs::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+
+::-moz-selection { / Code for Firefox /
+  color: red;
+  background: yellow;
+}
+
+::selection {
+  color: red;
+  background: yellow;
+}

@@ -1,0 +1,28 @@
+//RENAME TABLE
+ALTER TABLE `table_name` RENAME TO `new_table_name`;  
+
+
+//Windows Import DB: 
+A:\xampp\mysql\bin\mysql --max_allowed_packet=700M -u root -p db_name < db_file.sql
+
+//Increase Packet Datasize
+SET GLOBAL max_allowed_packet=1073741824;
+
+
+//Import db to xampp using Terminal
+/opt/lampp/bin/mysql --max_allowed_packet=700M -u root -p db_name < /opt/lampp/htdocs/lelojobs/file_name.sql
+
+15:15
+//Column count of mysql.proc is wrong. Expected 20, found 16. The table is probably corrupted
+/opt/lampp/bin/mysql_upgrade
+
+IF (NEW.`group`='Business' AND NEW.subscribed=true)  
+THEN
+    INSERT INTO groups_customer (id_group, id_customer) VALUES (3, NEW.id_customer);  
+ELSEIF (NEW.`group`='Particular' AND NEW.subscribed=true)  
+THEN
+    INSERT INTO groups_customer (id_group, id_customer) VALUES (4, NEW.id_customer);
+END IF;
+
+//Generate Random Number between 1.0 and 5.0
+ROUND((RAND() * (ROUND(1.0, 1)-ROUND(5.0, 1)) + 5.0), 1)

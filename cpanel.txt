@@ -1,0 +1,5 @@
+//Mails not received but sent
+Add A record with name "mail" and "IP" address as content
+ Add MX record with Name "@" and "mail.domain" as content
+
+Note: After this setting wait for 10 mins, queued emails will also be received

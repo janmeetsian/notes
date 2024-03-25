@@ -1,0 +1,2 @@
+//HTML PDF Embed without controls
+<embed src="{link}#toolbar=0&navpanes=0&scrollbar=0" width="{width}" height="{height}" />

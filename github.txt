@@ -1,0 +1,41 @@
+// delete branch locally
+git branch -d localBranchName
+
+// delete branch remotely
+git push origin --delete remoteBranchName
+
+
+//Add files to git ignore and remove the previously cached files 
+git rm -r --cached wp-content/backupwordpress-71b9123343-backups/
+
+16:00
+Working with SSH keys 
+Run this command
+1. ssh-keygen -o -t rsa -C "youremailaddress" 
+    You will get the following prompt
+    
+    Generating public/private rsa key pair.
+    Enter file in which to save the key (/c/Users/HP/.ssh/id_rsa)
+
+2. Enter the file name same as the repo
+3. It will then ask you to enter the passcode. Enter the passcode.
+4. Two files will be created by the name you entered "file_name" and "file_name.pub"
+5. Run this command to be recognized "ssh-add testrepo"
+6. Copy the contents of .pub file into deploy keys 
+7. eval "$(ssh-agent -s)" //works in git bash
+8. Then run ssh-add keyname //the secret key name 
+9. You can now start working with multiple accounts without ever needing to login in to the credential manager
+
+Go to the folder of the repository
+1. ssh-keygen
+2. Prompt will ask you to create a file name, add name of the file without any extension
+3. Prompt will ask you to enter the passcode for the file, enter the passcode and verify
+4. eval "$(ssh-agent -s)" to start the agent
+5. Run the following command ssh-add keyname {name of the private key}
+6. Copy the contents of key.pub in deploy keys in github and that's it
+
+//Error While Removing the File From Git using git rm file (1).sql
+Use:  git rm file\ \(1\).sql
+
+//Remove Large Files from History
+git filter-branch --index-filter 'git rm -r --cached --ignore-unmatch lelojobs\ \(1\).sql ' HEAD

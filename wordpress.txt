@@ -1,0 +1,329 @@
+Plugin File Paths
+plugin_basename(__FILE__);
+plugin_dir_path(__FILE__);
+plugins_url();
+plugin_dir_url('includes', __FILE__);
+plugin_dir_url(__FILE__);
+
+//Remove register notification
+remove_action( 'register_new_user', 'wp_send_new_user_notifications' );
+
+
+function add_roles_on_init() {
+       add_role( 'vitalite_booking_manager', 'Vitalite Booking Manager', array( 'read' => true, 'level_0' => true,'vitalite_booking_manager'=> true ) );
+   }
+   add_action('init', 'add_roles_on_init' );
+
+add_action( 'admin_init', 'my_remove_menu_pages' );
+function my_remove_menu_pages() {
+
+global $user_ID;
+    if ( current_user_can( 'vitalite_booking_manager' ) ) {
+        remove_menu_page('edit.php'); // Posts
+        remove_menu_page('upload.php'); // Media
+        remove_menu_page('link-manager.php'); // Links
+        remove_menu_page('edit-comments.php'); // Comments
+        remove_menu_page('edit.php?post_type=page'); // Pages
+        remove_menu_page('edit.php?post_type=doctor'); // Pages
+        remove_menu_page('edit.php?post_type=faq'); // Pages
+        remove_menu_page('edit.php?post_type=testimonial'); // Pages
+        remove_menu_page('edit.php?post_type=service'); // Pages
+        remove_menu_page('edit.php?post_type=gallery-item'); // Pages
+        remove_menu_page('edit.php?post_type=doctor-endorsement'); // Pages
+        remove_menu_page('edit.php?post_type=video'); // Pages
+        remove_menu_page('edit.php?post_type=departmentposts'); // Pages
+        remove_menu_page('edit.php?post_type=wcp_carousel'); // Pages
+        remove_menu_page('wpcf7');
+        remove_menu_page('jetpack');
+        remove_menu_page('vc-welcome');
+        remove_menu_page('plugins.php'); // Plugins
+        remove_menu_page('themes.php'); // Appearance
+        remove_menu_page('users.php'); // Users
+        remove_menu_page('tools.php'); // Tools
+        remove_menu_page('options-general.php'); // Settings
+        remove_menu_page('admin.php'); // Settings
+    }
+}
+
+JQuery NoConflict 
+(function($)
+ {
+    $(document).ready(function() {
+        // Your Javascript Codes is here
+    });
+})(jQuery);
+
+Ajax Tutorial
+https://webomnizz.com/how-to-use-ajax-in-wordpress-theme/
+
+//Wordpress AJAX functions file
+add_action( 'wp_ajax_lead_generation', 'lead_generation_capture' );
+add_action( 'wp_ajax_nopriv_lead_generation', 'lead_generation_capture' );
+
+function lead_generation_capture() {
+	global $wpdb;
+    $formData = array();
+    foreach($_POST['formData'] as $data){
+    	$formData[$data['name']] = $data['value']; 
+    }
+    //print_r($formData['first_name']);
+    
+	$table = $wpdb->prefix.'democlass_leads';
+	$wpdb->insert($table,$formData);
+	$insert_id = $wpdb->insert_id;
+	if($insert_id){
+		$response = array(
+						"returnType" => "true",
+						"message"	 => "You details have been submitted."
+					);
+		echo json_encode($response);
+	}else{
+		$response = array(
+						"returnType" => "false",
+						"message"	 => "Your details could not be submitted."
+					);
+		echo json_encode($response);
+	}
+    wp_die();
+}
+
+//Jquery File
+(function($)
+ {
+            
+            $(document).ready(function() {
+                $("#sendMessageButton").click( function(e) {
+                $("#digitalMarketingLeads").validate({
+                    rules: {
+                        firstname: "required",
+                        lastname: "required",
+                        email: {
+                                required: true,
+                                email: true
+                        },
+                        phone: {
+                            required: true,
+                            maxlength: 10,
+                            minlength:10
+                        },
+                        course: "required",
+                        subject: "required",
+                        message: "required"
+                        
+                    },
+                    messages: {
+                         firstname: "Please enter first name",
+                        lastname: "Please enter last name",
+                        email: {
+                                required: "Please enter email",
+                                email: "Please enter valid email address"
+                        },
+                        phone: {
+                            required:  "Please enter phone",
+                            maxlength: "Please enter 10 digit phone number",
+                            minlength: "Please enter 10 digit phone number"
+                        },
+                        course: "Please select a course",
+                        subject: "Please enter subject",
+                        message: "Please enter message"
+                    },
+                    submitHandler: function(e) {
+                        event.preventDefault();
+                        formData = $("#digitalMarketingLeads").serializeArray();
+                        $.ajax({
+                            type : "POST",
+                            dataType : "json",
+                            url : "<?php echo esc_url(admin_url('admin-ajax.php')); ?>",
+                            data : { 
+                                "action": "lead_generation",
+                                "formData": formData
+                            },
+                            success: function(response) {
+                                if(response.returnType == "true"){
+                                    $("#response").html(response.message);
+                                    $("#digitalMarketingLeads").hide();
+                                    $(".jumbotron").show();
+                                    setTimeout(function(){
+                                        window.location.href = "<?php echo site_url(); ?>";
+                                     }, 3000);
+                                }else if(response.returnType == "false"){
+                                    $("#response").html(response.message);
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+               
+            });
+        })(jQuery);
+
+//Origin CORS Error 
+<ifmodule mod_headers.c="">
+   SetEnvIf Origin "^(.*\.domain\.com)$" ORIGIN_SUB_DOMAIN=$1
+   Header set Access-Control-Allow-Origin "%{ORIGIN_SUB_DOMAIN}e" env=ORIGIN_SUB_DOMAIN
+   Header set Access-Control-Allow-Methods: "*"
+   Header set Access-Control-Allow-Headers: "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+</ifmodule>
+
+//Website optimization
+https://www.pixelemu.com/documentation/wordpress-tutorials/how-to-speed-up-wordpress-site-htaccess-optimization-part-1
+
+//Contact form 7 for Select first option as blank 
+first_as_label placeholder "select" 
+
+15:36
+//Add a custom interval, Send weekly emails to candidates
+add_filter( 'cron_schedules', 'weekly_email_alerts_interval' );
+function weekly_email_alerts_interval( $schedules ) { 
+    $schedules['five_seconds'] = array(
+        'interval' => 5,
+        'display'  => esc_html__( 'Every Five Seconds' ), );
+    return $schedules;
+}
+
+//Send Mails by SMTP 
+add_action( 'phpmailer_init', 'set_phpmailer_details' );
+function set_phpmailer_details( $phpmailer ) {
+    $phpmailer->isSMTP();     
+    $phpmailer->Host = 'smtp.gmail.com'; //gmail smtp host
+    $phpmailer->SMTPAuth = true;
+    $phpmailer->Port = 465;
+    $phpmailer->Username = 'lelojobs.mail@gmail.com';
+    $phpmailer->Password = '09Oct@1987';
+    $phpmailer->SMTPSecure = 'ssl';
+    $phpmailer->From       = 'donotreply@lelojobs.com';
+    $phpmailer->FromName   = 'Lelo Jobs';
+}
+
+add_action('wp_mail_failed', 'log_mailer_errors', 10, 1);
+function log_mailer_errors( $wp_error ){
+    $fn = ABSPATH . '/mail.log'; // say you've got a mail.log file in your server root
+    $fp = fopen($fn, 'a');
+    fputs($fp, "Mailer Error: " . date('Y-m-D') . $wp_error->get_error_message() ."\n");
+    fclose($fp);
+}
+
+add_action( 'wp_enqueue_scripts', 'lelojobs_nokri_dequeue_script', 100 );
+
+function lelojobs_nokri_dequeue_script() {
+    //dequeueing parent javascripts and loading from child theme
+    wp_deregister_script( 'nokri-custom' );
+    wp_dequeue_script('nokri-custom');
+    wp_register_script('nokri-custom', get_stylesheet_directory_uri() . '/js/custom.js', array('jquery'), '5.8.3', true); 
+    wp_enqueue_script( 'nokri-custom' );
+}
+
+function defer_parsing_of_js ( $url ) {
+	if ( FALSE === strpos( $url, '.js' ) ) return $url;
+	if ( strpos( $url, 'jquery.js' ) ) return $url;
+	return "$url' defer ";
+}
+
+add_filter( 'clean_url', 'defer_parsing_of_js', 11, 1 );
+
+<?php
+         $args = array(
+                                'type'       => 'best-vpns',
+                                'taxonomy'   => 'category',
+                                'orderby'    => 'name',
+                                'order'      => 'ASC',
+                               'hide_empty' => false,
+                               'exclude'    => array(1)
+    );
+
+   $cats = get_categories($args);
+   foreach($cats as $cat) {
+?>
+<?php } ?>
+
+Hyper Text Markup Language
+CMD conmands 
+1. Clear CMD-cls
+2. How to  list folder - dir
+3. To go one step back - cd ..
+4. How to change drive  - <drive_letter>:
+5. How to go folder cd <folder_name>
+6. Create folder - mkdir <folder_name>
+7. move files - wordpress-6.3\project_1\*.* D:\xampp\htdocs\project_1
+8. Extract zipped folder - tar -xf <file_name>
+…or create a new repository on the command line
+echo "# test" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin git@github.com:devsimransian/test.git
+git push -u origin main
+…or push an existing repository from the command line
+git remote add origin git@github.com:devsimransian/test.git
+git branch -M main
+git push -u origin main
+…or import code from another repository
+You can initialize this repository with code from a Subversion, Mercurial, or TFS project.           
+
+Add Custom Meta Boxes
+
+/**
+ * Register meta boxes.
+ */
+function hcf_register_meta_boxes() {
+    add_meta_box(
+ 'hcf-1', __( 'Extra Meta Fields', 'hcf' ), 'hcf_display_callback', 'guides' );
+}
+add_action( 'add_meta_boxes', 'hcf_register_meta_boxes' );
+
+/**
+ * Meta box display callback.
+ *
+ * @param WP_Post $post Current post object.
+ */
+function hcf_display_callback( $post ) {
+        //var_dump(str_contains($post->post_name, 'guide'));
+        if(str_contains($post->post_name, 'guide') === true){
+            get_template_part('template-parts/guides-form');
+        }
+        
+}
+
+function hcf_save_meta_box(
+ $post_id ) {
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+    if ( $parent_id = wp_is_post_revision( $post_id ) ) {
+        $post_id = $parent_id;
+    }
+    $fields = [
+                'overall_rating',
+                'expert_review_link',
+                'cheapest_price',
+                'pay_monthly_price',
+                'free_trial',
+                'money_back_guarantee',
+                'data_cap',
+                'logging_policy',
+                'data_leaks',
+                'encryption',
+                'jurisdiction',
+                'average_local_download_speed',
+                'servers',
+                'ip_addresses',
+                'countries',
+                'us_netflix',
+                'streaming_services_nblocked',
+                'torrenting',
+                'simultaneous_connections',
+                'native_app_support',
+                'compatible_via_router',
+                'smart_dns',
+                'kill_switch',
+                'browser_extensions',
+                'works_in_china',
+                'support' 
+                ];
+    foreach ( $fields as $field ) {
+        if ( array_key_exists( $field, $_POST ) ) {
+            update_post_meta( $post_id, $field, sanitize_text_field( $_POST[$field] ) );
+        }
+     }
+}
+add_action( 'save_post', 'hcf_save_meta_box' );
